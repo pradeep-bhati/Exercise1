@@ -82,7 +82,7 @@ public class InterationConfig {
 //	           .handle(Files.outboundAdapter(m -> m.getHeaders().get("dir"))
 //                       .fileNameGenerator(m -> m.getHeaders().get("fileName").toString()+".xml")
 //                       .autoCreateDirectory(true))
-//	           .channel(Source.OUTPUT)
+	           .channel(Source.OUTPUT)
 	           .handle(getHandler())
 	           .transform(m -> m.toString())
 	           .log(LoggingHandler.Level.INFO,"TEST_LOGGER",m -> m.getHeaders().get("logData"))
@@ -97,7 +97,7 @@ public class InterationConfig {
 		   FileWritingMessageHandlerSpec fileWritingMessageHandlerSpec =
 		   (Files.outboundAdapter(m -> m.getHeaders().get("dir"))
            .fileNameGenerator(m -> m.getHeaders().get("fileName").toString()+".xml")
-           .autoCreateDirectory(false));	   	
+           .autoCreateDirectory(true));	   	
 		   return fileWritingMessageHandlerSpec;
 	   }
 	   
@@ -154,7 +154,7 @@ public class InterationConfig {
 	        return metadataStore;
 	    }
 	 
-	   @Transformer(outputChannel = Source.OUTPUT)
+	   @Transformer
 	   String transformSyndEntryToXmlString(Object o)  {
 		   System.out.println("bhati");
 		  SyndEntry message = (SyndEntry) o;
@@ -221,7 +221,7 @@ public class InterationConfig {
 	    }
 	   	
 	 	
-	    @Transformer(inputChannel = "errorChannel",outputChannel=OutputProcessor.OUTPUT)
+	    @Transformer(inputChannel = "errorChannel")
 		   String transformError(Message<MessageHandlingException> message)  {
 	    	System.out.println("Check inside");
 	 		String msg=message.getPayload().getCause().getMessage();
